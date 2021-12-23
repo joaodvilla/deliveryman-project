@@ -8,13 +8,16 @@ import { prisma } from "../../../database/prismaClient";
 // gerar token
 
 
+interface IToken {
+  token: string;
+}
 interface IAuthenticateClient {
   username: string;
   password: string;
 };
 
 export class AuthenticateClientUseCase {
-  async execute({ username, password }: IAuthenticateClient) {
+  async execute({ username, password }: IAuthenticateClient): Promise<IToken> {
     const client = await prisma.clients.findFirst({
       where: {
         username
@@ -36,6 +39,6 @@ export class AuthenticateClientUseCase {
       expiresIn: '1d',
     });
 
-    return token;
+    return { token };
   }
 }
